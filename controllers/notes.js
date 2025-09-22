@@ -5,7 +5,6 @@ const noteRouter = express.Router()
 
 noteRouter.get("/get_notes", async (req,res)=>{
     const notes = await Note.find()
-    console.log(notes                                                       )
     res.json(notes)
 });
 
@@ -29,6 +28,18 @@ noteRouter.delete("/delete_note/:id", async(req,res)=>{
         res.json("Note deleted successfully")
     }else{
         console.log("Note Delete Error")
+    }
+});
+
+noteRouter.put("/update_note/:id", async(req,res)=>{
+    const id = req.params.id
+    const title = req.body.title
+    const content = req.body.content
+    const note = await Note.findByIdAndUpdate(id, {title, content})
+    if(note){
+        res.json(note)
+    }else{
+        console.log("Note Update Error")
     }
 });
 
