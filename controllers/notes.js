@@ -18,7 +18,7 @@ noteRouter.post("/add_note", async(req,res)=>{
     if(saveNote){
         res.json(saveNote)
     }else{
-        console.log("Note Add Error")
+        console.log("Note Add Errors")
     }
 });
 
