@@ -1,6 +1,7 @@
 import express from "express";
 import mongodb from "./db/mongodb.js";
 import noteRouter from "./controllers/notes.js";
+import userRouter from "./controllers/user.js";
 import cors from "cors";
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(cors({
 }))
 
 app.use("/", noteRouter)
+app.use("/user", userRouter)
 
 app.listen(3000, () => {
     console.log("Backend Express Listening in 3000");
