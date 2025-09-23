@@ -6,13 +6,13 @@ import Note from "./Note.jsx";
 import axios from "axios";
 
 function App(){
-
+    const BACKEND_SERVER = import.meta.env.VITE_BACKEND_ENDPOINT
     const [notes, setNotes] = useState([]);
 
     const fetchData = async() =>{
         try{
-            const response = await axios.get('http://localhost:3000/get_notes');
-            setNotes([response.data])
+            const response = await axios.get(BACKEND_SERVER + '/get_notes');
+            setNotes(response.data)
         }catch(err){
             console.log(err);
         }
@@ -24,10 +24,12 @@ function App(){
 
     async function addNote(titleText, contentText) {
         try{
-            let body = {}
-            body["title"] = titleText
-            body["content"] = contentText
-            const response = await axios.post('http://localhost:3000/add_note', body);
+            let body = {
+                "title": titleText,
+                "content": contentText
+            }
+            const response = await axios.post(BACKEND_SERVER + '/add_note', body);
+            console.log(response.data)
             setNotes([...notes, response.data]);
         }catch(err){
             console.log(err)
@@ -36,19 +38,20 @@ function App(){
 
     async function deleteNote(id){
         try{
-            const response = await axios.delete(`http://localhost:3000/${id}`)
+            const response = await axios.delete(BACKEND_SERVER + `/delete_note/${id}`)
             fetchData();
         }catch(err){
             console.log(err)
         };
     };
 
-    async function updateNote(id, titleText, contentText) {
+    async function updateNote(id, title, content) {
         try{
-            let body = {}
-            body["title"] = titleText,
-            body["content"] = contentText
-            const response = await axios.put(`http://localhost:3000/${id}`, body)
+            let body = {
+                "title": title,
+                "content": content
+            }
+            const response = await axios.put(BACKEND_SERVER + `/update_note/${id}`, body)
             fetchData();
         }catch(err){
             console.log(err)
@@ -60,7 +63,7 @@ function App(){
                 <CreateNote addNote={addNote}/>
                 <Footer/>
                 {notes.map((note, index)=>(
-                    <Note key={note.id} id={note.id} title={note.title} content={note.content} delete={deleteNote} />
+                    <Note key={note._id.toString()} id={note._id.toString()} title={note.title} content={note.content} onDelete={deleteNote} onUpdate={updateNote}/>
                 ))}
             </div>
     
